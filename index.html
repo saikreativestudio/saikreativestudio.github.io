@@ -274,11 +274,15 @@
             Founder of SaiKreative Studio
           </p>
           <p
+            class="text-base sm:text-lg md:text-xl text-white max-w-3xl mx-auto leading-relaxed">
+            Graphic Designer | Digital Marketer
+          </p>
+          <!-- <p
             id="typing-text"
             class="text-base sm:text-lg md:text-xl text-orange-400 font-medium typing min-h-[2rem]"
           >
             Graphic Designer
-          </p>
+          </p> -->
           <p
             class="text-sm sm:text-base text-gray-400 max-w-2xl mx-auto leading-relaxed"
           >
@@ -333,7 +337,26 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <!-- Text Content -->
+          <!-- Image (Now on Left) -->
+          <div class="flex justify-center fade-in">
+            <div class="relative">
+              <div class="w-80 h-80 rounded-3xl overflow-hidden shadow-2xl">
+                <img
+                  src="assets/images/profile.png"
+                  alt="Saikumar Kirlampalli"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div
+                class="absolute -top-4 -right-4 w-8 h-8 bg-orange-500 rounded-full animate-pulse"
+              ></div>
+              <div
+                class="absolute -bottom-4 -left-4 w-6 h-6 bg-purple-500 rounded-full animate-bounce"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Text Content (Now on Right) -->
           <div class="space-y-6 fade-in">
             <p class="text-lg text-gray-700 leading-relaxed">
               I'm Saikumar Kirlampalli, a passionate graphic designer and
@@ -411,28 +434,34 @@
               </div>
             </div>
           </div>
-
-          <!-- Image -->
-          <div class="flex justify-center fade-in">
-            <div class="relative">
-              <div class="w-80 h-80 rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src="assets/images/saikreative-studio.png"
-                  alt="Saikumar Kirlampalli"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <div
-                class="absolute -top-4 -right-4 w-8 h-8 bg-orange-500 rounded-full animate-pulse"
-              ></div>
-              <div
-                class="absolute -bottom-4 -left-4 w-6 h-6 bg-purple-500 rounded-full animate-bounce"
-              ></div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
+
+    <style>
+      .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.8s ease forwards;
+      }
+
+      .fade-in:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .fade-in:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Counter animation would require JavaScript */
+    </style>
 
     <!-- Services Section -->
     <section id="services" class="py-20 bg-white">
@@ -1068,6 +1097,7 @@
                   <option>Brand Identity</option>
                   <option>Social Media Design</option>
                   <option>YouTube Thumbnails</option>
+                  <option>Digital Marketing Service</option>
                   <option>Print Design</option>
                   <option>Complete Branding Package</option>
                   <option>Website Design</option>
