@@ -1353,14 +1353,12 @@
         setTimeout(type, 1000);
       }
 
-      // Form submission handling
+      // Clear form on submission
       document.querySelector("form").addEventListener("submit", function (e) {
-        const submitBtn = this.querySelector('button[type="submit"]');
-
-        submitBtn.textContent = "Sending...";
-        submitBtn.disabled = true;
-
-        // Let the form submit naturally - Formspree will handle redirect
+        // Small delay to allow form data to be captured, then clear
+        setTimeout(() => {
+          this.reset();
+        }, 100);
       });
       // Initialize everything
       document.addEventListener("DOMContentLoaded", () => {
