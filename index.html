@@ -1352,26 +1352,6 @@
 
         setTimeout(type, 1000);
       }
-
-      // Form submission
-      document.querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-
-        submitBtn.textContent = "Sending...";
-        submitBtn.disabled = true;
-
-        // Simulate form submission
-        setTimeout(() => {
-          alert("Thank you! Your message has been sent successfully.");
-          this.reset();
-          submitBtn.textContent = originalText;
-          submitBtn.disabled = false;
-        }, 2000);
-      });
-
       // Initialize everything
       document.addEventListener("DOMContentLoaded", () => {
         setupTypingEffect();
