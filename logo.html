@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SaiKreative - Social Media Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0f0f23 0%,
+          #1a1a2e 50%,
+          #16213e 100%
+        );
+        min-height: 100vh;
+      }
+
+      /* Gallery Grid View */
+      .gallery-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 120px 20px 40px;
+      }
+
+      .gallery-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+
+      .gallery-title {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+      }
+
+      .gallery-subtitle {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+      }
+
+      .stats-container {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+
+      .stat-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 20px 30px;
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+      }
+
+      .gallery-item {
+        position: relative;
+        aspect-ratio: 1;
+        border-radius: 16px;
+        overflow: hidden;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .gallery-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        border-color: rgba(255, 107, 53, 0.4);
+      }
+
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        opacity: 0;
+      }
+
+      .gallery-item img.loaded {
+        opacity: 1;
+      }
+
+      .gallery-item:hover img {
+        transform: scale(1.1);
+      }
+
+      .gallery-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 107, 53, 0.9),
+          rgba(247, 147, 30, 0.8)
+        );
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+      }
+
+      .zoom-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        margin-bottom: 15px;
+      }
+
+      .overlay-text {
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-top: 10px;
+      }
+
+      /* Loading Spinner */
+      .loading-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        border-top-color: #ff6b35;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+
+      .loading-spinner.hidden {
+        opacity: 0;
+      }
+
+      @keyframes spin {
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      /* Error State */
+      .error-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        font-size: 0.9rem;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      /* Fullscreen View */
+      .fullscreen-view {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .fullscreen-view.active {
+        display: flex;
+      }
+
+      .fullscreen-image {
+        max-width: 95vw;
+        max-height: 95vh;
+        object-fit: contain;
+        opacity: 0;
+        transform: scale(0.95);
+        transition: all 0.4s ease;
+      }
+
+      .fullscreen-image.loaded {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .close-btn,
+      .nav-btn {
+        position: fixed;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        transition: all 0.3s ease;
+      }
+
+      .close-btn {
+        top: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 24px;
+      }
+
+      .close-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+      }
+
+      .nav-btn {
+        top: 50%;
+        transform: translateY(-50%);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .nav-btn.prev {
+        left: 30px;
+      }
+
+      .nav-btn.next {
+        right: 30px;
+      }
+
+      .counter {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        padding: 12px 24px;
+        color: white;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 10000;
+      }
+
+      .text-gradient {
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Fade-in Animation */
+      .fade-in {
+        opacity: 0;
+        animation: fadeIn 0.6s ease forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .gallery-title {
+          font-size: 2rem;
+        }
+
+        .gallery-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .nav-btn {
+          width: 50px;
+          height: 50px;
+        }
+
+        .nav-btn.prev {
+          left: 15px;
+        }
+
+        .nav-btn.next {
+          right: 15px;
+        }
+
+        .stats-container {
+          gap: 15px;
+        }
+
+        .stat-card {
+          padding: 15px 20px;
+        }
+
+        .stat-number {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Header -->
+    <nav
+      class="fixed w-full z-50 bg-gray-900/95 backdrop-blur-lg border-b border-gray-800"
+    >
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+          <h1 class="text-xl font-bold text-gradient">SaiKreative Studio</h1>
+          <button
+            onclick="goBack()"
+            class="flex items-center space-x-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-10 border border-white/10 hover:bg-white/10 transition-all duration-300"
+          >
+            <svg
+              class="w-5 h-5 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              ></path>
+            </svg>
+            <span class="text-white font-medium">Back</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Gallery Grid View -->
+    <div class="gallery-container">
+      <div class="gallery-header">
+        <h1 class="gallery-title">Logo Designs</h1>
+        <p class="gallery-subtitle">
+          Cutting-edge visual content that drives engagement across all
+          platforms
+        </p>
+
+        <!-- Stats Cards -->
+        <div class="stats-container">
+          <div class="stat-card fade-in">
+            <div class="stat-number" id="image-count">0</div>
+            <div class="stat-label">Design Samples</div>
+          </div>
+          <div class="stat-card fade-in" style="animation-delay: 0.1s">
+            <div class="stat-number">4K</div>
+            <div class="stat-label">High Resolution</div>
+          </div>
+          <div class="stat-card fade-in" style="animation-delay: 0.2s">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">Possibilities</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-grid" id="gallery-grid">
+        <!-- Gallery items will be generated here -->
+      </div>
+    </div>
+
+    <!-- Fullscreen View -->
+    <div class="fullscreen-view" id="fullscreen-view">
+      <button class="close-btn" onclick="closeFullscreen()">&times;</button>
+
+      <button class="nav-btn prev" onclick="navigateImage(-1)">
+        <svg
+          width="24"
+          height="24"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+      </button>
+
+      <img class="fullscreen-image" id="fullscreen-image" alt="Gallery Image" />
+
+      <button class="nav-btn next" onclick="navigateImage(1)">
+        <svg
+          width="24"
+          height="24"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          ></path>
+        </svg>
+      </button>
+
+      <div class="counter" id="counter">1 / 1</div>
+    </div>
+
+    <script>
+      // Image configuration - Add or remove images here
+      const images = [
+        { src: "./assets/images/logo/image1.png", title: "Design 1" },
+        { src: "./assets/images/logo/image2.png", title: "Design 2" },
+        { src: "./assets/images/logo/image3.png", title: "Design 3" },
+        { src: "./assets/images/logo/image4.png", title: "Design 4" },
+      ];
+
+      let currentIndex = 0;
+      let loadedImagesCount = 0;
+      const fullscreenView = document.getElementById("fullscreen-view");
+      const fullscreenImage = document.getElementById("fullscreen-image");
+      const counterElement = document.getElementById("counter");
+      const galleryGrid = document.getElementById("gallery-grid");
+      const imageCountElement = document.getElementById("image-count");
+
+      // Animate counter
+      function animateCounter(element, target) {
+        let current = 0;
+        const increment = target / 30;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          element.textContent = Math.floor(current);
+        }, 30);
+      }
+
+      // Generate gallery grid
+      function initGallery() {
+        // Update image count with animation
+        animateCounter(imageCountElement, images.length);
+
+        images.forEach((imageData, index) => {
+          const item = document.createElement("div");
+          item.className = "gallery-item fade-in";
+          item.style.animationDelay = `${index * 0.1}s`;
+          item.onclick = () => openFullscreen(index);
+
+          const img = new Image();
+          const spinner = document.createElement("div");
+          spinner.className = "loading-spinner";
+          const errorMsg = document.createElement("div");
+          errorMsg.className = "error-message";
+          errorMsg.innerHTML = `
+            <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin: 0 auto 10px;">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>Image not found</div>
+          `;
+
+          item.innerHTML = `
+            <img src="${imageData.src}" alt="${imageData.title}" loading="lazy" />
+            <div class="gallery-overlay">
+              <div class="zoom-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                </svg>
+              </div>
+              <div class="overlay-text">${imageData.title}</div>
+            </div>
+          `;
+
+          const imgElement = item.querySelector("img");
+          item.appendChild(spinner);
+          item.appendChild(errorMsg);
+
+          imgElement.onload = () => {
+            spinner.classList.add("hidden");
+            imgElement.classList.add("loaded");
+            loadedImagesCount++;
+          };
+
+          imgElement.onerror = () => {
+            spinner.classList.add("hidden");
+            errorMsg.classList.add("show");
+            imgElement.style.display = "none";
+          };
+
+          galleryGrid.appendChild(item);
+        });
+      }
+
+      // Open fullscreen view
+      function openFullscreen(index) {
+        currentIndex = index;
+        fullscreenView.classList.add("active");
+        document.body.style.overflow = "hidden";
+        updateFullscreenImage();
+      }
+
+      // Close fullscreen view
+      function closeFullscreen() {
+        fullscreenView.classList.remove("active");
+        document.body.style.overflow = "auto";
+        fullscreenImage.classList.remove("loaded");
+      }
+
+      // Navigate images
+      function navigateImage(direction) {
+        fullscreenImage.classList.remove("loaded");
+
+        setTimeout(() => {
+          currentIndex += direction;
+
+          if (currentIndex < 0) {
+            currentIndex = images.length - 1;
+          } else if (currentIndex >= images.length) {
+            currentIndex = 0;
+          }
+
+          updateFullscreenImage();
+        }, 200);
+      }
+
+      // Update fullscreen image
+      function updateFullscreenImage() {
+        fullscreenImage.src = images[currentIndex].src;
+        counterElement.textContent = `${currentIndex + 1} / ${images.length}`;
+
+        fullscreenImage.onload = () => {
+          fullscreenImage.classList.add("loaded");
+        };
+      }
+
+      // Go back to portfolio
+      function goBack() {
+        window.history.back();
+      }
+
+      // Keyboard navigation
+      document.addEventListener("keydown", (e) => {
+        if (!fullscreenView.classList.contains("active")) return;
+
+        if (e.key === "Escape") closeFullscreen();
+        if (e.key === "ArrowLeft") navigateImage(-1);
+        if (e.key === "ArrowRight") navigateImage(1);
+      });
+
+      // Touch swipe support
+      let touchStartX = 0;
+      fullscreenView.addEventListener(
+        "touchstart",
+        (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        },
+        { passive: true }
+      );
+
+      fullscreenView.addEventListener(
+        "touchend",
+        (e) => {
+          const touchEndX = e.changedTouches[0].screenX;
+          const diff = touchStartX - touchEndX;
+          if (Math.abs(diff) > 50) {
+            navigateImage(diff > 0 ? 1 : -1);
+          }
+        },
+        { passive: true }
+      );
+
+      // Preload images for smooth navigation
+      function preloadImages() {
+        images.forEach((imageData) => {
+          const img = new Image();
+          img.src = imageData.src;
+        });
+      }
+
+      // Initialize gallery and preload images
+      initGallery();
+      preloadImages();
+    </script>
+  </body>
+</html>

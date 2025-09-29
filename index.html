@@ -185,11 +185,6 @@
               >Portfolio</a
             >
             <a
-              href="#testimonials"
-              class="text-white hover:text-orange-400 transition-colors"
-              >Testimonials</a
-            >
-            <a
               href="#contact"
               class="text-white hover:text-orange-400 transition-colors"
               >Contact</a
@@ -432,6 +427,11 @@
                 >
                   Digital Marketing
                 </div>
+                <div
+                  class="px-4 py-2 bg-violet-100 text-violet-800 rounded-full text-sm font-semibold text-center hover:shadow-lg transition-all"
+                >
+                  Web Designing
+                </div>
               </div>
             </div>
           </div>
@@ -656,7 +656,10 @@
           <div class="swiper-wrapper">
             <!-- Card 1 -->
             <div class="swiper-slide bg-gray-800/50 rounded-2xl p-6 hover-lift">
-              <div class="mb-6 relative overflow-hidden rounded-xl">
+              <div
+                class="mb-6 relative overflow-hidden rounded-xl cursor-pointer"
+                onclick="window.location.href='/logo.html'"
+              >
                 <img
                   src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=250&fit=crop"
                   alt="Business Cards Design"
@@ -683,7 +686,8 @@
             <!-- Card 2 -->
             <div class="swiper-slide bg-gray-800/50 rounded-2xl p-6 hover-lift">
               <div
-                class="mb-6 grid grid-cols-2 gap-2 relative overflow-hidden rounded-xl"
+                class="mb-6 grid grid-cols-2 gap-2 relative overflow-hidden rounded-xl cursor-pointer"
+                onclick="window.location.href='/social.html'"
               >
                 <img
                   src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=120&fit=crop"
@@ -724,7 +728,10 @@
 
             <!-- Card 3 -->
             <div class="swiper-slide bg-gray-800/50 rounded-2xl p-6 hover-lift">
-              <div class="mb-6 relative overflow-hidden rounded-xl">
+              <div
+                class="mb-6 relative overflow-hidden rounded-xl cursor-pointer"
+                onclick="window.location.href='/social.html'"
+              >
                 <img
                   src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=250&fit=crop"
                   alt="YouTube Thumbnails"
@@ -749,7 +756,10 @@
 
             <!-- Card 4 -->
             <div class="swiper-slide bg-gray-800/50 rounded-2xl p-6 hover-lift">
-              <div class="mb-6 relative overflow-hidden rounded-xl">
+              <div
+                class="mb-6 relative overflow-hidden rounded-xl cursor-pointer"
+                onclick="window.location.href='/social.html'"
+              >
                 <img
                   src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=250&fit=crop"
                   alt="Website Design"
@@ -765,112 +775,6 @@
 
           <!-- Pagination + Arrows -->
           <div class="swiper-pagination"></div>
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section
-      id="testimonials"
-      class="py-20 bg-gradient-to-br from-gray-900 to-gray-800"
-    >
-      <div class="max-w-5xl mx-auto px-4">
-        <div class="text-center mb-16 fade-in">
-          <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
-            What Clients Say
-          </h2>
-          <div class="w-24 h-1 bg-orange-500 mx-auto rounded-full"></div>
-        </div>
-
-        <!-- Swiper Container -->
-        <div class="swiper testimonialSwiper">
-          <div class="swiper-wrapper">
-            <!-- Review 1 -->
-            <div
-              class="swiper-slide bg-gray-800/50 rounded-2xl p-8 text-center"
-            >
-              <div
-                class="w-20 h-20 rounded-full mx-auto mb-6 ring-4 ring-orange-500 initial-avatar"
-              >
-                PS
-              </div>
-              <p class="text-white text-lg leading-relaxed mb-6">
-                "Saikumar is incredibly creative and delivered exactly what I
-                needed. His designs brought fresh energy to our campaigns."
-              </p>
-              <h4 class="font-bold text-white text-lg">Priya Sharma</h4>
-              <p class="text-gray-300">Marketing Manager, Bangalore</p>
-              <div class="flex justify-center mt-4">
-                <div class="flex text-orange-400">★★★★★</div>
-              </div>
-            </div>
-
-            <!-- Review 2 -->
-            <div
-              class="swiper-slide bg-gray-800/50 rounded-2xl p-8 text-center"
-            >
-              <div
-                class="w-20 h-20 rounded-full mx-auto mb-6 ring-4 ring-orange-500 initial-avatar"
-              >
-                RK
-              </div>
-              <p class="text-white text-lg leading-relaxed mb-6">
-                "Fantastic experience! The team really understood my brand
-                vision and created graphics that impressed everyone."
-              </p>
-              <h4 class="font-bold text-white text-lg">Ravi Kumar</h4>
-              <p class="text-gray-300">Entrepreneur, Hyderabad</p>
-              <div class="flex justify-center mt-4">
-                <div class="flex text-orange-400">★★★★★</div>
-              </div>
-            </div>
-
-            <!-- Review 3 -->
-            <div
-              class="swiper-slide bg-gray-800/50 rounded-2xl p-8 text-center"
-            >
-              <div
-                class="w-20 h-20 rounded-full mx-auto mb-6 ring-4 ring-orange-500 initial-avatar"
-              >
-                AP
-              </div>
-              <p class="text-white text-lg leading-relaxed mb-6">
-                "The creativity and professionalism is top-notch. Each design
-                was unique and perfectly matched our campaigns."
-              </p>
-              <h4 class="font-bold text-white text-lg">Anjali Patel</h4>
-              <p class="text-gray-300">Creative Director, Vijayawada</p>
-              <div class="flex justify-center mt-4">
-                <div class="flex text-orange-400">★★★★★</div>
-              </div>
-            </div>
-
-            <!-- Review 4 -->
-            <div
-              class="swiper-slide bg-gray-800/50 rounded-2xl p-8 text-center"
-            >
-              <div
-                class="w-20 h-20 rounded-full mx-auto mb-6 ring-4 ring-orange-500 initial-avatar"
-              >
-                MR
-              </div>
-              <p class="text-white text-lg leading-relaxed mb-6">
-                "SaiKreative Studio gave my startup the branding boost we
-                needed. From logo to social media designs, everything was
-                brilliant."
-              </p>
-              <h4 class="font-bold text-white text-lg">Manoj Reddy</h4>
-              <p class="text-gray-300">Startup Founder, Mangalore</p>
-              <div class="flex justify-center mt-4">
-                <div class="flex text-orange-400">★★★★★</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pagination + Arrows -->
-          <div class="swiper-pagination mt-6"></div>
           <div class="swiper-button-next"></div>
           <div class="swiper-button-prev"></div>
         </div>
